@@ -88,3 +88,6 @@ h1 {
 .task button:hover {
   color: #ff4444;
 }
+.task button i {
+  font-size: 16px;
+}
