@@ -5,11 +5,16 @@ const taskList = document.getElementById('task-list');
 
 // Load tasks from localStorage on page load
 window.onload = function () {
-  const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  let tasks = [];
+  try {
+    tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+  } catch (e) {
+    localStorage.removeItem('tasks');
+  }
   tasks.forEach(task => addTaskToDOM(task.text, task.completed));
 };
 
-// Add button click
+// Add task button click
 addBtn.addEventListener('click', () => {
   const taskText = input.value.trim();
   if (taskText !== '') {
@@ -19,39 +24,41 @@ addBtn.addEventListener('click', () => {
   }
 });
 
-// Add task to the DOM
+// Function to add a task to the DOM
 function addTaskToDOM(text, completed) {
   const li = document.createElement('li');
-  li.className = 'task' + (completed ? ' completed' : '');
+  li.className = 'task';
+  if (completed) li.classList.add('completed');
 
   const span = document.createElement('span');
   span.textContent = text;
 
+  // Buttons
   const completeBtn = document.createElement('button');
-  completeBtn.textContent = '✔';
+  completeBtn.innerHTML = '<i class="fas fa-check"></i>';
   completeBtn.title = 'Mark as Done';
 
   const editBtn = document.createElement('button');
-  editBtn.textContent = '✏';
+  editBtn.innerHTML = '<i class="fas fa-edit"></i>';
   editBtn.title = 'Edit Task';
 
   const deleteBtn = document.createElement('button');
-  deleteBtn.textContent = '🗑';
+  deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
   deleteBtn.title = 'Delete Task';
 
+  // Append elements
   li.appendChild(span);
   li.appendChild(completeBtn);
   li.appendChild(editBtn);
   li.appendChild(deleteBtn);
   taskList.appendChild(li);
 
-  // Complete task
+  // Event Listeners
   completeBtn.addEventListener('click', () => {
     li.classList.toggle('completed');
     updateStorage();
   });
 
-  // Edit task
   editBtn.addEventListener('click', () => {
     const newText = prompt('Edit your task:', span.textContent);
     if (newText !== null && newText.trim() !== '') {
@@ -60,7 +67,6 @@ function addTaskToDOM(text, completed) {
     }
   });
 
-  // Delete task
   deleteBtn.addEventListener('click', () => {
     li.remove();
     updateStorage();
@@ -74,7 +80,7 @@ function saveTask(text, completed) {
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
-// Update localStorage based on current DOM
+// Update localStorage from current DOM
 function updateStorage() {
   const tasks = [];
   document.querySelectorAll('.task').forEach(taskEl => {
@@ -85,14 +91,3 @@ function updateStorage() {
   });
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
-const completeBtn = document.createElement('button');
-completeBtn.innerHTML = '<i class="fas fa-check"></i>';
-completeBtn.title = 'Mark as Done';
-
-const editBtn = document.createElement('button');
-editBtn.innerHTML = '<i class="fas fa-edit"></i>';
-editBtn.title = 'Edit Task';
-
-const deleteBtn = document.createElement('button');
-deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
-deleteBtn.title = 'Delete Task';
