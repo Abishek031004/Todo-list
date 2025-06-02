@@ -85,3 +85,14 @@ function updateStorage() {
   });
   localStorage.setItem('tasks', JSON.stringify(tasks));
 }
+const completeBtn = document.createElement('button');
+completeBtn.innerHTML = '<i class="fas fa-check"></i>';
+completeBtn.title = 'Mark as Done';
+
+const editBtn = document.createElement('button');
+editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+editBtn.title = 'Edit Task';
+
+const deleteBtn = document.createElement('button');
+deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+deleteBtn.title = 'Delete Task';
